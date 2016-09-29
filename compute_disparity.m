@@ -7,3 +7,4 @@ function [disparityMap] = compute_disparity(left, right)
   title('Disparity Map');
   colormap jet
   colorbar
+  disparityMap = uint8((disparityMap + 6 / 16)*255);

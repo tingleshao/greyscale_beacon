@@ -1,0 +1,1 @@
+% testing the effect of different image codecs

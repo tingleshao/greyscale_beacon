@@ -1,0 +1,1 @@
+% test the effect of different texture recover type

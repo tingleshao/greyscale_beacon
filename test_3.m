@@ -1,0 +1,1 @@
+% test the effect of different number of beacons
