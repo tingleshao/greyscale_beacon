@@ -2,14 +2,16 @@ function [ result_map ] = combine_two_maps( depth_map, watershed_map, foreground
 % use high threshold to know which seg part is foreground
 watershed_map = rgb2gray(watershed_map);
 % foreground: 29
+threshold = 4;
 map_size = size(depth_map);
 w = map_size(2);
 h = map_size(1);
 
+result_map = zeros(map_size);
 for x = 1:w
     for y = 1:h
-        if watershed_map(y,x) == 29
-            
+        if watershed_map(y,x) == 29 && depth_map(y,x) > threshold
+            result_map(y,x) = 255; 
         end
     end
 end

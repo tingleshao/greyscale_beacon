@@ -29,7 +29,8 @@ im10t(:,:,3) = im10(:,:,3)';
 %im11t(:,:,2) = im11(:,:,2)';
 %im11t(:,:,3) = im11(:,:,3)';
 
-disparity_map1 = compute_disparity(im9, im10);
+[disparity_map1, foo] = compute_disparity(im9, im10);
+result_map = combine_two_maps(disparity_map1, Lrgb);
 %disparity_map2 = compute_disparity(im10t, im11t);
 %disparity_map3 = compute_disparity(im9t, im11t);
 %
@@ -40,40 +41,67 @@ binary_disparity_map1 = threshold_disparity(disparity_map1);
 refined_disparity_map1 = refine_disparity(binary_disparity_map1);
 %refined_disparity_map2 = refine_disparity(binary_disparity_map2);
 %refined_disparity_map3 = refine_disparity(binary_disparity_map3);
+
+[e_map, d_map, final_map] = refine_combined_maps(result_map, Lrgb);
+
+
 figure;
 subplot(4,3,1);
 imshow(disparity_map1);
+title('depth map (d)')
+
 subplot(4,3,2);
 %imshow(disparity_map2);
+title('watershed segmentation (w)')
 imshow(Lrgb);
 %subplot(4,3,3);
 %imshow(disparity_map3);
 
 subplot(4,3,4);
 imshow(binary_disparity_map1);
-%subplot(4,3,5);
+title('threshold on d (x)');
+subplot(4,3,5);
 %imshow(binary_disparity_map2);
-%subplot(4,3,6);
+imshow(result_map);
+title('d && w (a)');
+subplot(4,3,6);
 %imshow(binary_disparity_map3);
+imshow(e_map);
+title('erosion on a (e)');
 
 subplot(4,3,7);
 imshow(refined_disparity_map1);
-%subplot(4,3,8);
+title('refinement on x (y)');
+subplot(4,3,8);
 %imshow(refined_disparity_map2);
-%subplot(4,3,9);
+imshow(d_map);
+title('dilation on e (d)');
+subplot(4,3,9);
 %imshow(refined_disparity_map3);
-
+imshow(final_map);
+title('adjust d with w');
 
 subplot(4,3,10);
 imshow(im9);
 subplot(4,3,11);
 imshow(im10);
+
+compress_image_three_methods(im9, final_map);
+
+% save the intermediate result
+imwrite(disparity_map1, 'imgs/exp_save/d.png');
+imwrite(Lrgb, 'imgs/exp_save/w.png');
+imwrite(binary_disparity_map1,'imgs/exp_save/x.png');
+imwrite(result_map,'imgs/exp_save/s.png');
+imwrite(e_map,'imgs/exp_save/e.png');
+imwrite(refined_disparity_map1,'imgs/exp_save/y.png');
+imwrite(d_map,'imgs/exp_save/d.png');
+imwrite(final_map,'imgs/exp_save/final.png');
+
+
+
 %subplot(4,3,12);
 %imshow(im11t);
-
-
-
-
 
 %[encoded, data_length] = encode_map(refined_disparity_map1, im9);
 %decoded_image = decode_map(encoded); 
