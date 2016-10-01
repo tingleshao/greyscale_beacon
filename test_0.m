@@ -1,11 +1,11 @@
 % this a first test that tests the map quality???
 addpath(genpath('imgs/disparity/'));
 addpath(genpath('imgs/disparity/disparity_mid_color/'));
-
+clear
+close all
 %im9 = imread('imgs/disparity/disparity_mid_color/im9.jpg');
 %im10 = imread('imgs/disparity/disparity_mid_color/im10.jpg');
 %im11 = imread('imgs/disparity/disparity_mid_color/im11.jpg');
-
 
 %im9 = imread('imgs/disparity/disparity_mid_color/im18.jpg');
 %im10 = imread('imgs/disparity/disparity_mid_color/im19.jpg');
@@ -15,7 +15,7 @@ im9 = imread('imgs/disparity/old/im7s.png');
 im10 = imread('imgs/disparity/old/im8s.png');
 Lrgb = watershed_img(im9);
 
-% TODO: why disparity map is binary? 
+% TODO: why disparity map is binary?
 
 im9t(:,:,1) = im9(:,:,1)';
 im9t(:,:,2) = im9(:,:,2)';
@@ -80,32 +80,46 @@ subplot(4,3,9);
 %imshow(refined_disparity_map3);
 imshow(final_map);
 title('adjust d with w');
+subplot(4,3,12);
+
+imshow(find_boundary(uint8(final_map)));
 
 subplot(4,3,10);
 imshow(im9);
 subplot(4,3,11);
 imshow(im10);
 
-compress_image_three_methods(im9, final_map);
+[dct_res, w_res, t_res] = compress_image_three_methods(im9, final_map);
 
+test_img_with_tri_plot = 0;
+if test_img_with_tri_plot
+    figure
+    h2 = imshow(imresize(rgb2gray(im9),[64,64]));
+    ax2 = ancestor(h2, 'axes');
+    ax2.Visible = 'on';
+    hold(ax2, 'on');
+    triplot(t_res, 'w', 'Parent', ax2);
+end
+
+save_exp_images = 0;
 % save the intermediate result
-imwrite(disparity_map1, 'imgs/exp_save/d.png');
-imwrite(Lrgb, 'imgs/exp_save/w.png');
-imwrite(binary_disparity_map1,'imgs/exp_save/x.png');
-imwrite(result_map,'imgs/exp_save/s.png');
-imwrite(e_map,'imgs/exp_save/e.png');
-imwrite(refined_disparity_map1,'imgs/exp_save/y.png');
-imwrite(d_map,'imgs/exp_save/d.png');
-imwrite(final_map,'imgs/exp_save/final.png');
-
-
+if save_exp_images
+    imwrite(disparity_map1, 'imgs/exp_save/d.png');
+    imwrite(Lrgb, 'imgs/exp_save/w.png');
+    imwrite(binary_disparity_map1,'imgs/exp_save/x.png');
+    imwrite(result_map,'imgs/exp_save/s.png');
+    imwrite(e_map,'imgs/exp_save/e.png');
+    imwrite(refined_disparity_map1,'imgs/exp_save/y.png');
+    imwrite(d_map,'imgs/exp_save/d.png');
+    imwrite(final_map,'imgs/exp_save/final.png');
+end
 
 %subplot(4,3,12);
 %imshow(im11t);
 
 %[encoded, data_length] = encode_map(refined_disparity_map1, im9);
-%decoded_image = decode_map(encoded); 
+%decoded_image = decode_map(encoded);
 %quality = quality_meature(im3, decoded_image);
 
 %quality
-% 
+%
