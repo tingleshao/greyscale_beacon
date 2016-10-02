@@ -82,8 +82,9 @@ curr_triangularize_res = triangularize_res;
 for i = 2:20
     curr_triangularize_res = reduce_triangle(curr_triangularize_res, 1);
     subplot(4,5,20-i+2);
-    plot_img_with_tri(input_image) 
-    imshow(curr_img_small, curr_triangularize_res);
+ %   plot_img_with_tri(input_image, curr_triangularize_res) 
+%    imshow(curr_img_small, curr_triangularize_res);
+reduce_img_from_tri(imresize(input_image, [64,64]),curr_triangularize_res );
 end
 
 end

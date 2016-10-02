@@ -4,7 +4,7 @@
 % assumption: img size 64 x 64
 
 function [ result_img, bitlength ] = reduce_img_from_tri( img, tri )
- figure
+% figure
     h2 = imshow(imresize(rgb2gray(img),[64,64]));
     ax2 = ancestor(h2, 'axes');
     ax2.Visible = 'on';
@@ -16,8 +16,9 @@ function [ result_img, bitlength ] = reduce_img_from_tri( img, tri )
 for i = 1:number_of_tris
     curr_tri = conn_list(i,:);
     pts = [points(curr_tri(1),:); points(curr_tri(2),:); points(curr_tri(3),:)];
-    color = rand(1,3); % TODO: replace by the average color / intensity inside that triangle
-    patch(pts(:,1), pts(:,2), color);
+   % color = rand(1,3); % TODO: replace by the average color / intensity inside that triangle
+   color = average_color(img, pts);
+   patch(pts(:,1), pts(:,2), color);
 end
 result_img = [];
 bitlength = 0;
