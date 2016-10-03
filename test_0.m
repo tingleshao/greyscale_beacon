@@ -15,8 +15,6 @@ im9 = imread('imgs/disparity/old/im7s.png');
 im10 = imread('imgs/disparity/old/im8s.png');
 Lrgb = watershed_img(im9);
 
-% TODO: why disparity map is binary?
-
 im9t(:,:,1) = im9(:,:,1)';
 im9t(:,:,2) = im9(:,:,2)';
 im9t(:,:,3) = im9(:,:,3)';
