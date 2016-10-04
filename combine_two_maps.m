@@ -10,7 +10,7 @@ h = map_size(1);
 result_map = zeros(map_size);
 for x = 1:w
     for y = 1:h
-        if watershed_map(y,x) == 29 && depth_map(y,x) > threshold
+        if ismember(watershed_map(y,x),foreground_color) && depth_map(y,x) > threshold
             result_map(y,x) = 255; 
         end
     end

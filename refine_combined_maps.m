@@ -1,7 +1,9 @@
 
-function [erode_map, dilate_map, result_map] = refine_combined_maps(input_map, watershed_map)
+function [erode_map, dilate_map, result_map] = refine_combined_maps(input_map, watershed_map, foreground_color)
 se = strel('disk', 5);
 se2 = strel('disk', 10);
+input_map = bwareaopen(input_map,1000);
+
 % erosion
 erode_map = imerode(input_map, se);
 % dilation
@@ -15,7 +17,7 @@ h = map_size(1);
 result_map = zeros(map_size);
 for x = 1:w
     for y = 1:h
-        if graywatershed_map(y,x) == 29 && dilate_map(y,x) > 0
+        if ismember(graywatershed_map(y,x), foreground_color) && dilate_map(y,x) > 0
             result_map(y,x) = 255; 
         end
     end
