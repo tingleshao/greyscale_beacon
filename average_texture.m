@@ -1,6 +1,4 @@
-% 
-
-function [ avgcolor ] = average_color( img, pts )
+function [ avgtexture ] = average_texture(img, pts)
 addpath(genpath('poly_stuff/'));
 % make the image to be 64 x 64 
 curr_img = imresize(img, [64,64]);
@@ -20,7 +18,6 @@ for i = 1:64*64
         color = [color; curr_img(y,x,:)];
     end
 end
-avgcolor = mean(color, 1) / 255;
-
+avgtexture = triangle2square(pts, ps, color);
 end
 
