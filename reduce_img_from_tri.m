@@ -5,7 +5,8 @@
 
 function [ result_img, bitlength ] = reduce_img_from_tri( img, tri )
 % figure
-    h2 = imshow(imresize(rgb2gray(img),[64,64]));
+ %   h2 = imshow(imresize(rgb2gray(img),[64,64]));
+    h2 = imshow(zeros(64,64));
     ax2 = ancestor(h2, 'axes');
     ax2.Visible = 'on';
     hold(ax2, 'on');

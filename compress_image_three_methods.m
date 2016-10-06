@@ -3,7 +3,8 @@
 % Wavelet
 % triangularize
 function [ dct_res, wavelet_res, curr_triangularize_res, dct_size, wavelet_size, tri_size, param_list ] = compress_image_three_methods( input_image, map )
-
+dct_res = 0;
+wavelet_res = 0;
 dct_size= 0;
 wavelet_size=0;
 tri_size=0;
@@ -16,6 +17,8 @@ curr_img(:,:,3) = uint8(input_image(:,:,3)) .* (uint8(map)/uint8(255));
 
 curr_img_small = imresize(curr_img, [64,64]);
 curr_img_yuv = rgb2ycbcr(curr_img_small);
+do_prev3 = 0
+if do_prev3
 %% DCT
 dct_curr_y = dct2(curr_img_yuv(:,:,1));
 dct_curr_u = dct2(imresize(curr_img_yuv(:,:,2),[32,32]));
@@ -145,6 +148,32 @@ for i = 2:20
     [bits , raw_bits]= compute_tri_size(curr_triangularize_res);
     title([num2str(bits),',', num2str(raw_bits)]);
 end
+end
+%% Tri - texture
+
+figure;
+subplot(4,5,1)
+imshow(rgb2gray(input_image));
+
+small_map = imresize(map, [64,64]);
+small_map(small_map < 10) = 0;
+small_map(small_map > 0) = 255;
+triangularize_res = triangularization(small_map);
+
+curr_triangularize_res = triangularize_res;
+for i = 2:20
+    if (size(curr_triangularize_res.Points,1) <= 3)
+        break
+    end
+    curr_triangularize_res = reduce_triangle(curr_triangularize_res, 1);
+    subplot(4,5,20-i+2);
+ %   plot_img_with_tri(input_image, curr_triangularize_res) 
+ %   imshow(curr_img_small, curr_triangularize_res);
+ [canvas, blen] =  reduce_img_from_tri_texture(imresize(input_image, [64,64]), curr_triangularize_res,1);
+ %   [bits , raw_bits]= compute_tri_size(curr_triangularize_res);
+ %   title([num2str(bits),',', num2str(raw_bits)]);
+end
+%dct_res = canvas
 
 end
 

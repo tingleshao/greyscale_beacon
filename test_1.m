@@ -80,7 +80,9 @@ for i = 1:length(left_img_index)
         %w_grey_size: 1xk2
         %t_grey_size: 1xk3
     [dct_res, w_res, t_res, dct_size, w_size, t_size, param_list] = compress_image_three_methods(img_left, final_map);
-        % %save(data), configure params
+   
+    
+    % %save(data), configure params
  %   else 
 %    load(compressed_image_name);
  %   end

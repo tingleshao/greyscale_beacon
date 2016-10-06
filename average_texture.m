@@ -11,13 +11,15 @@ for x = 1:64
 end
 [in, on] = inpoly(ps, pts);
 color = [];
+psps = [];
 for i = 1:64*64
-    if on(i)
+    if in(i)
         x = idivide(uint32(i),uint32(64)) + 1;
         y = mod((i-1), 64) + 1;
+        psps = [psps; [x, y]];
         color = [color; curr_img(y,x,:)];
     end
 end
-avgtexture = triangle2square(pts, ps, color);
+avgtexture = triangle2square(pts, psps, color);
 end
 
