@@ -71,9 +71,12 @@ for w = 1:size(conn_list,1);
         if in(i)
             x = idivide(uint32(i),uint32(64)) + 1;
             y = mod((i-1), 64) + 1;
-            ty
-            tx
-            size(transformed_texture)
+       %     ty
+      %      tx
+      %      size(transformed_texture)
+            if tx > size(transformed_texture, 2)
+               break
+            end
             canvas(y,x,:) = transformed_texture(ty,tx,:);
             ty = ty+1;
             if ty > size(transformed_texture, 1)
