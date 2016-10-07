@@ -1,10 +1,11 @@
 
 %pts(:,1), pts(:,2), mean_texture, texture_index
-function [ canvas] = patch_texture( conn_list, points, mean_texture, texture_index )
+function [ canvas] = patch_texture( orig_img, conn_list, points, mean_texture, texture_index )
 % draws patch inside this triangle
 
+background = imresize(imresize(orig_img,[3,3]),[64,64]);
 % canvas
-canvas = zeros(64,64,3);
+canvas = background;
 % for each texture in mean_texture, take half and affine transform it to
 % the triangle and add to the canvas
 size(conn_list)

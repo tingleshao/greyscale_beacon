@@ -32,15 +32,14 @@ mean_img(:,:,3) = reshape(mean_texture(129:192,1),[8,8]);
 %figure;
 %figure;
 %imshow(mean_img/255)
-canvas = patch_texture(conn_list, points, mean_texture, texture_index);
+canvas = patch_texture(img, conn_list, points, mean_texture, texture_index);
 %for i = 1:number_of_tris
 %    curr_tri = conn_list(i,:);
 %    pts = [points(curr_tri(1),:); points(curr_tri(2),:); points(curr_tri(3),:)];
     % TODO: implement patch_texture()
-    
 %    patch_texture(pts(:,1), pts(:,2), mean_texture, texture_index);
 %end
-imshow(canvas/255)
+imshow(canvas)
 result_img = canvas/255;
 bitlength = 0;
 triplot(tri, 'w', 'Parent', ax2);

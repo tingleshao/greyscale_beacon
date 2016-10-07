@@ -17,7 +17,7 @@ curr_img(:,:,3) = uint8(input_image(:,:,3)) .* (uint8(map)/uint8(255));
 
 curr_img_small = imresize(curr_img, [64,64]);
 curr_img_yuv = rgb2ycbcr(curr_img_small);
-do_prev3 = 0
+do_prev3 = 0;
 if do_prev3
 %% DCT
 dct_curr_y = dct2(curr_img_yuv(:,:,1));
@@ -169,7 +169,7 @@ for i = 2:20
     subplot(4,5,20-i+2);
  %   plot_img_with_tri(input_image, curr_triangularize_res) 
  %   imshow(curr_img_small, curr_triangularize_res);
- [canvas, blen] =  reduce_img_from_tri_texture(imresize(input_image, [64,64]), curr_triangularize_res,1);
+    [canvas, blen] =  reduce_img_from_tri_texture(imresize(input_image, [64,64]), curr_triangularize_res,1);
  %   [bits , raw_bits]= compute_tri_size(curr_triangularize_res);
  %   title([num2str(bits),',', num2str(raw_bits)]);
 end
