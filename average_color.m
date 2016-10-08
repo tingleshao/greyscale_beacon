@@ -20,7 +20,7 @@ for i = 1:64*64
         color = [color; curr_img(y,x,:)];
     end
 end
-avgcolor = mean(color, 1) / 255;
+avgcolor = double(median(color, 1)) / 255.0;
 
 end
 

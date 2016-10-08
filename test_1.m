@@ -1,4 +1,10 @@
 % testing the effect of different image codecs
+% signs start from set1
+signs = [[13 14]; [20 21]; [39 40]; [46 45]; [51 50]; [57 58]; [61 62]; 
+[69 70]; [79 80]; [86 87]; [92 91]; [97 98]; [103 102]; [106 105]; [110 111];
+ [115 116]; [122 123]; [132 133]; []];
+signs_f = [[179 0]; [179 0]; [179 76]; [203 0]; [151 0]; [179 0]; [179 0]; 
+[76 0]; [179 0]; [104 0]; [29 0]; [29 0]; [226 0]; [29 0]];
 
 addpath(genpath('imgs/disparity'));
 addpath(genpath('imgs/disparity/disparity_mid_color'));
@@ -17,9 +23,9 @@ tri_ssim = [];
 % read images 
 %img_dir = 'imgs/disparity/disparity_mid_color/';
 %img_dir = 'imgs/disparity/old2/';
-img_dir = 'imgs/disparity/test_image/signs/set0/';
-left_img_index = [7];
-right_img_index = [9];
+img_dir = 'imgs/disparity/test_image/signs/set14/';
+left_img_index = [106];
+right_img_index = [105];
 img_left_matrix = zeros(288,288,3,length(left_img_index));
 img_right_matrix = zeros(288,288,3,length(left_img_index));
 img_third_matrix = zeros(288,288,3,length(left_img_index));
@@ -42,7 +48,7 @@ for i = 1:length(left_img_index)
     
     % compute joint map
     % TODO: finda way to tell the foreground region in Lrgb
-    foreground_color = [76];
+    foreground_color = [29];
     result_map = combine_two_maps(disparity_map1, Lrgb, foreground_color); 
     %refined_disparity_map1 = refine_disparity(binary_disparity_map1);
     [e_map, d_map, final_map] = refine_combined_maps(result_map, Lrgb, foreground_color);
@@ -50,14 +56,23 @@ for i = 1:length(left_img_index)
     figure;
     subplot(1,5,1);
     imshow(img_left);
+    imwrite(img_left, [img_dir, 'segs/img_left.png']);
     subplot(1,5,2);
     imshow(disparity_map1);
+    imwrite(disparity_map1, [img_dir, 'segs/disparity_map1.png']);
+
     subplot(1,5,3);
     imshow(Lrgb);
+    imwrite(Lrgb, [img_dir, 'segs/Lrgb.png']);
+
     subplot(1,5,4);
     imshow(result_map);
+    imwrite(result_map, [img_dir, 'segs/result_map.png']);
+
     subplot(1,5,5);
     imshow(final_map);
+    imwrite(final_map, [img_dir, 'segs/final_map.png']);
+
 
     % TODO: save the joint map (and intermediate maps) so we don't recompute
     % compute the dct compression image under different quality settings
@@ -79,7 +94,7 @@ for i = 1:length(left_img_index)
         %dct_grey_size: 1xk1
         %w_grey_size: 1xk2
         %t_grey_size: 1xk3
-    [dct_res, w_res, t_res, dct_size, w_size, t_size, param_list] = compress_image_three_methods(img_left, final_map);
+    [dct_res, w_res, t_res, dct_size, w_size, t_size, param_list] = compress_image_three_methods(img_left, final_map, img_dir);
    
     
     % %save(data), configure params

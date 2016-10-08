@@ -1,4 +1,4 @@
-function [ result_img, bitlength ] = reduce_img_from_tri_texture( img, tri, texture_num )
+function [ result_img, bitlength ] = reduce_img_from_tri_texture( img, tri, texture_num, work_dir )
 % figure
 h2 = imshow(zeros(64,64));
 ax2 = ancestor(h2, 'axes');
@@ -42,7 +42,10 @@ canvas = patch_texture(img, conn_list, points, mean_texture, texture_index);
 imshow(canvas)
 result_img = canvas/255;
 bitlength = 0;
-triplot(tri, 'w', 'Parent', ax2);
+%triplot(tri, 'w', 'Parent', ax2);
+imagesize = compute_texture_tri_size(tri, mean_texture, img);
+title(num2str(imagesize))
+imwrite(canvas, [work_dir, 'tri2_res/numtri_', num2str(number_of_tris), '_size_', num2str(imagesize), '.png']);
 
 
 end
