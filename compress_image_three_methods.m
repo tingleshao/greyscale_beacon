@@ -9,6 +9,13 @@ dct_size= 0;
 wavelet_size=0;
 tri_size=0;
 param_list  = 0;
+curr_triangularize_res = 0;
+
+do_dct = 1;
+do_wavelet = 0;
+do_tri1 = 0;
+do_tri2 = 0;
+
 addpath(genpath('encoder/'));
 curr_img(:,:,1) = uint8(input_image(:,:,1)) .* (uint8(map)/uint8(255));
 curr_img(:,:,2) = uint8(input_image(:,:,2)) .* (uint8(map)/uint8(255));
@@ -17,21 +24,37 @@ curr_img(:,:,3) = uint8(input_image(:,:,3)) .* (uint8(map)/uint8(255));
 
 background_size = length(imencode(imresize(input_image, [3,3])));
 background = imresize(imresize(input_image,[3,3]),[64,64]);
+
+input_imager = uint8(input_image(:,:,1)) .* (uint8(255-map)/uint8(255));
+input_imageg = uint8(input_image(:,:,2)) .* (uint8(255-map)/uint8(255));
+input_imageb = uint8(input_image(:,:,3)) .* (uint8(255-map)/uint8(255));
+
+input_image_background_only(:,:,1) = input_imager;
+input_image_background_only(:,:,2) = input_imageg;
+input_image_background_only(:,:,3) = input_imageb;
+
+dct_wavelet_background = imresize(imresize(input_image_background_only,[3,3]),[64,64]);
+dct_wavelet_background_size = length(imencode(imresize(input_image, [3,3])));
+
 curr_img_small = imresize(curr_img, [64,64]);
 curr_img_yuv = rgb2ycbcr(curr_img_small);
 do_prev3 = 1;
 if do_prev3
-    do_dct = 0;
     if do_dct
         %% DCT
         dct_curr_y = dct2(curr_img_yuv(:,:,1));
         dct_curr_u = dct2(imresize(curr_img_yuv(:,:,2),[32,32]));
         dct_curr_v = dct2(imresize(curr_img_yuv(:,:,3),[32,32]));
+
+    %    dct_curr_y = dct2(curr_img_small(:,:,1));
+    %    dct_curr_u = dct2(curr_img_small(:,:,2));
+     %   dct_curr_v = dct2(curr_img_small(:,:,3));
+
         %compressedDct = zeros(64,64,62);
         figure;
         subplot(4,5,1)
         %imshow(twoImgSmall, [min(min(dct_curr)), max(max(dct_curr))]);
-        imshow(curr_img_small);
+        imshow(imresize(input_image, [64,64]));
         %title('orig')
         xx = 2;
         dct_res = [];
@@ -59,9 +82,12 @@ if do_prev3
             end
             % compressedDct(:,:,i-3) = dctCopy;
             subplot(4,5,xx);
-            idct_curr_y = idct2(double(int8(dct_copy_y)));
-            idct_curr_u = imresize(idct2(double(int8(dct_copy_u))), [64,64]);
-            idct_curr_v = imresize(idct2(double(int8(dct_copy_v))), [64,64]);
+            idct_curr_y = idct2(dct_copy_y);
+        %    idct_curr_u = imresize(idct2(double(int8(dct_copy_u))), [64,64]);
+        %    idct_curr_v = imresize(idct2(double(int8(dct_copy_v))), [64,64]);
+
+            idct_curr_u = imresize(idct2(dct_copy_u),[64,64]);
+            idct_curr_v = imresize(idct2(dct_copy_v),[64,64]);
             %  dct_res = [dct_res, huffman_enc(dctCopy(:))/8];
             % fileID = fopen(['data/dct/data',num2str(xx),'.bin'],'w');
             %  fwrite(fileID,dctCopy);
@@ -73,16 +99,21 @@ if do_prev3
             % dctTwoImgSmall(dctTwoImgSmall < 180) = 0;
             % dctTwoImgSmall(dctTwoImgSmall >= 180) = 255;
             %  imshow(idct_curr, [min(min(idct_curr)), max(max(idct_curr))]);
-            imshow(ycbcr2rgb(idct_curr));
-            bits = length(gzipencode([int8(dct_copy_y(:)); int8(dct_copy_y(:)); int8(dct_copy_y(:))]));
+        %    imshow(ycbcr2rgb(idct_curr));
+            final_img = dct_wavelet_background + ycbcr2rgb(uint8(idct_curr));
+         %   final_img = ycbcr2rgb(uint8(idct_curr));
+
+            imshow(final_img);
+
+           bits = length(gzipencode([int8(dct_copy_y(:)); int8(dct_copy_y(:)); int8(dct_copy_y(:))]))+ dct_wavelet_background_size;
+     %       bits = length(gzipencode([int8(dct_copy_y(:)); int8(dct_copy_y(:)); int8(dct_copy_y(:))]));
             raw_bits = length([int8(dct_copy_y(:)); int8(dct_copy_y(:)); int8(dct_copy_y(:))]);
             
-            title([num2str(bits),',',num2str(raw_bits)]);
+            title(num2str(bits));
         end
     end
     
     %% Wavelet
-    do_wavelet = 1
     if do_wavelet
         n = 5;                   % Decomposition Level
         %w = 'sym8';              % Near symmetric wavelet
@@ -113,7 +144,7 @@ if do_prev3
             
             wcompress('c',curr_img_small,'foo.wtc','gbl_mmc_h', 'comprat', thr);
             xd = wcompress('u','foo.wtc');
-            xd = xd+background;
+            xd = xd+dct_wavelet_background;
             subplot(4,5,xx)
             imshow(xd)
             % imshow(ycbcr2rgb(xd));
@@ -129,14 +160,13 @@ if do_prev3
             xx = xx + 1;
             % wavelet_res = [wavelent_res, huffman_enc([cxd(:); lxd(:)])/8];
             %   bits = length(gzipencode(uint8([cxd_y(:); lxd_y(:); cxd_u(:); lxd_u(:); cxd_v(:); lxd_v(:)])));
-            bits = 64 * 64 * 24 * thr/800+background_size;
+            bits = 64 * 64 * 24 * thr/800+dct_wavelet_background_size;
             title(num2str(bits));
             imwrite(xd, [work_dir, 'wavelet_res/thr_', num2str(thr), '_size_', num2str(bits), '.png']);
         end
     end
     %% Triangularization
     % may be do some texture k-means later
-    do_tri1 = 1;
     if do_tri1
         figure;
         subplot(4,5,1)
@@ -165,7 +195,6 @@ if do_prev3
 end
 
 %% Tri - texture
-do_tri2 = 1
 if do_tri2
     figure;
     subplot(4,5,1)

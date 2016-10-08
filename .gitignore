@@ -1,0 +1,10 @@
+*.png
+*.fig
+*.jpg
+*.xcf
+*.obj
+*.pdf
+*.mat
+*.wtc
+
+*~
