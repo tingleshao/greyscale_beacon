@@ -12,7 +12,7 @@ param_list  = 0;
 curr_triangularize_res = 0;
 
 do_dct = 1;
-do_wavelet = 0;
+do_wavelet = 1;
 do_tri1 = 0;
 do_tri2 = 0;
 
@@ -104,8 +104,8 @@ if do_prev3
          %   final_img = ycbcr2rgb(uint8(idct_curr));
 
             imshow(final_img);
-
            bits = length(gzipencode([int8(dct_copy_y(:)); int8(dct_copy_y(:)); int8(dct_copy_y(:))]))+ dct_wavelet_background_size;
+ imwrite(final_img, [work_dir, 'jpeg_res/thr_', num2str(i), '_size_', num2str(bits), '.png']);
      %       bits = length(gzipencode([int8(dct_copy_y(:)); int8(dct_copy_y(:)); int8(dct_copy_y(:))]));
             raw_bits = length([int8(dct_copy_y(:)); int8(dct_copy_y(:)); int8(dct_copy_y(:))]);
             
