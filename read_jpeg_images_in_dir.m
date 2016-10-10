@@ -22,7 +22,6 @@ for i = 1:length(file_names)
             k = k+1;
         end
     end
-    
 end
 imgs = uint8(imgs);
 

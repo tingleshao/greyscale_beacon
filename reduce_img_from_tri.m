@@ -6,11 +6,13 @@
 function [ canvas, bitlength ] = reduce_img_from_tri( img, tri, background )
 % figure
 %   h2 = imshow(imresize(rgb2gray(img),[64,64]));
-%h2 = imshow(background);
+
+%h2 = imshow(zeros(64,64));
 %ax2 = ancestor(h2, 'axes');
 %ax2.Visible = 'on';
 %hold(ax2, 'on');
 %   triplot(tri, 'w', 'Parent', ax2);
+   
 conn_list = tri.ConnectivityList;
 number_of_tris = size(conn_list, 1);
 points = tri.Points;
@@ -34,7 +36,7 @@ for i = 1:number_of_tris
             canvas(y,x,:) = color*255;
         end
     end
-    % patch(pts(:,1), pts(:,2), color, 'EdgeAlpha', 0);
+%     patch(pts(:,1), pts(:,2), color, 'EdgeAlpha', 0);
 end
 imshow(canvas);
 result_img = [];
