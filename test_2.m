@@ -1,11 +1,6 @@
 % compares DCT vs wavelet vs triangle
 
 %
-%
-%
-%
-%
-
 clear
 close all
 signs_dir = 'imgs/disparity/test_image/signs/';
@@ -16,7 +11,9 @@ scenes_dir = 'imgs/disparity/test_image/scenes/';
 
 
 % for each type, we generate a comparison
-signs_set_lst = [1 2 3 4 5 6 7 8 9 11 13 14 15 16 18 19 20];
+%signs_set_lst = [1 2 3 4 5 6 7 8 9 11 13 14 15 16 18 19 20];
+signs_set_lst = [18];
+
 buildings_set_lst = 1;
 near_indoor_set_lst = [0 1 2 3 4 5 6 7 8 9 10 11 12 13 14];
 near_outdoor_set_lst = [];
@@ -31,22 +28,21 @@ signs = [[13 14]; [20 21]; [39 40]; [46 45]; [51 50]; [57 58]; [61 62];
     [115 116]; [122 123]; [132 133]; [140 141]; [28 29]; [31 32]];
 
 
-for i = 1:17
-    signs_lr = signs(signs_set_lst(i),:);
-    signs_orig_img_names{i} = ['im', num2str(signs_lr(1)), '.png'];
-end
+%for i = 1:17
+%    signs_lr = signs(signs_set_lst(i),:);
+%    signs_orig_img_names{i} = ['im', num2str(signs_lr(1)), '.png'];
+%end
 
-for i = 0:14
-    indoors_lr = indoors(near_indoor_set_lst(i),:);
-    indoors_orig_img_names{i} = ['im', num2str(indoors_lr(1)), 'png'];
-end
+%for i = 0:14
+%    indoors_lr = indoors(near_indoor_set_lst(i),:);
+%    indoors_orig_img_names{i} = ['im', num2str(indoors_lr(1)), 'png'];
+%end
 
-
-generate_jpeg = 1
+generate_jpeg = 0
 generate_jp2k = 0
 generate_png = 0
 
-do_sign = 0
+do_sign = 1
 if do_sign
     xx = 1
     for i = signs_set_lst
@@ -57,7 +53,7 @@ if do_sign
         tri2_dir = [signs_dir, 'set', num2str(i), '/tri2_res/']
         tri3_dir = [signs_dir, 'set', num2str(i), '/tri3_res/']
         
-        orig_img_dir = [signs_dir, 'set', num2str(i), '/', signs_orig_img_names{xx}]
+        orig_img_dir = [signs_dir, 'set', num2str(i), '/segs/img_left.png']
         xx = xx + 1;
         orig_img = imresize(imread(orig_img_dir),[64,64]);
         
@@ -102,7 +98,7 @@ if do_sign
     end
 end
 
-do_indoor = 1
+do_indoor = 0
 if do_indoor
     xx = 1
     for i = indoor_set_lst
