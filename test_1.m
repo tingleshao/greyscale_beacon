@@ -27,18 +27,18 @@ signs_do2 = [0; 0;0;0;1;1;1;1;
     1;0;1;1;1;0];
 
 % start from 1
-buildings = [[26 29]; [8 9]; [15 10]; [19 16]; [33 30]; [20 25]];
+buildings = [[0 1]; [26 29]; [0 1]; [15 10]; [0 2]; [0 1]; [0 1]; [0 1]; [0 1]; [19 16]];
 buildings_f = [[179 29]; [179 0]; [179 0]; [179 0]; [179 0]; [76 0]];
 buildings_do = [0; 1; 1; 1; 1; 1];
 buildings_do2 = [0; 0; 0; 0; 0; 1];
 
 % start from 0
-indoors = [[0 2]; [0 3]; [0 4]; [7 8]; [44 45]; [0 1]; [0 6]; [0 4]; [0 8]; [0 9]; [0 9]; [0 2]; [0 10]; [0 10]; [91 92]];
+indoors = [[0 2]; [0 3]; [0 4]; [7 8]; [44 45]; [0 1]; [0 6]; [0 4]; [0 8]; [0 9]; [0 9]; [0 2]; [0 10]; [0 10]; [91 92]; [0 1]; [0 1]; [0 6]; [0 9]; [0 9]; [0 1]; [0 8]];
 indoors_f = [[29 151 ]; [29 226]; [179 0]; [29 0]; [203 0]; [179 0]; [179 0]; [179 0]];
 indoors_do = [0; 0; 0; 0; 0; 0; 0; 1];
 
 % start from 0
-outdoors = [[3 6]; [7 9]; [11 13];];
+outdoors = [[0 1]; [9 7]; [0 1]; [0 1]; [0 1]; [0 1]; [0 1]; [0 2]; [0 5]; [3 6]; [0 1]];
 outdoors_f = [[179 0]; [179 0]; [179 0]];
 outdoors_do = [1; 1; 1];
 
@@ -61,13 +61,25 @@ tri_ssim = [];
 % read images
 %img_dir = 'imgs/disparity/disparity_mid_color/';
 %img_dir = 'imgs/disparity/old2/';
-indoor_ks = [1 2 3 6 7 8 9 10 11 12 13 14 15];
-for k = indoor_ks
-    %img_dir = ['imgs/disparity/test_image/scenes/set', num2str(k-1), '/'];
-    img_dir = ['imgs/disparity/test_image/near_indoor_objs/set', num2str(k-1), '/'];
+%indoor_ks = [1 2 3 6 7 8 9 10 11 12 13 14 15];
+%indoor_ks = [0 1 2 3 4 5 6 7 8 9 11 12];
+indoor_ks = [10];
+
+%indoor_ks = [15 16 17 18 19 20 21];
+%building_ks = [0 2 4 5 6 7 8];
+building_ks = [3 9];
+outdoor_ks = [1 3 4 5 6 7 8 9]
+%for k = indoor_ks
+%for k = building_ks
+for k = indoor_ks 
+   % img_dir = ['imgs/disparity/test_image/scenes/set', num2str(k-1), '/'];
+    img_dir = ['imgs/disparity/test_image/near_indoor_objs/set', num2str(k), '/'];
+   %img_dir = ['imgs/disparity/test_image/buildings/set', num2str(k), '/'];
     
     %  if indoors_do(k)
-    lr = indoors(k,:);
+  %  lr = indoors(k+1,:);
+ %   lr = buildings(k+1,:);
+    lr = outdoors(k+1,:);
     left_img_index = lr(1);
     right_img_index = lr(2);
     img_left_matrix = zeros(288,288,3,length(left_img_index));

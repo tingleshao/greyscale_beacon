@@ -1,6 +1,5 @@
 % test the effect of different number of beacons
 
-
 if 0
     clear
     close all
@@ -10,18 +9,18 @@ if 0
     signs_set_lst = [1 2 3 4 5 6 7 8 9 11 13 14 15 16 18 19];
     %signs_set_lst = [18];
     
-    %buildings_set_lst = 1;
-    %near_indoor_set_lst = [0 1 2 3 4 5 6 7 8 9 10 11 12 13 14];
-    %near_outdoor_set_lst = [];
+    buildings_set_lst = [0 1 2 3 4 5 6 7 8 9];
+    near_indoor_set_lst = [0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21];
+    near_outdoor_set_lst = [0 1 2 3 4 5 6 7 8 9];
     %scenes_set_lst = [];
     
     %buildings_orig_img_names = cell(1,1);
     %buildings_orig_img_names{1} = 'im26.png';
     
-    signs_orig_img_names = cell(17,1);
-    signs = [[13 14]; [20 21]; [39 40]; [46 45]; [51 50]; [57 58]; [61 62];
-        [69 70]; [79 80]; [86 87]; [92 91]; [97 98]; [103 102]; [106 105]; [110 111];
-        [115 116]; [122 123]; [132 133]; [140 141]; [28 29]; [31 32]];
+ %   signs_orig_img_names = cell(17,1);
+ %  signs = [[13 14]; [20 21]; [39 40]; [46 45]; [51 50]; [57 58]; [61 62];
+  %      [69 70]; [79 80]; [86 87]; [92 91]; [97 98]; [103 102]; [106 105]; [110 111];
+   %     [115 116]; [122 123]; [132 133]; [140 141]; [28 29]; [31 32]];
     
     
     %for i = 1:17
@@ -50,7 +49,7 @@ if 0
     tri1_map = containers.Map;
     tri2_map = containers.Map;
     
-    [data_volume, battery_life] = volume_for_beacons_and_time(1, 0.5);
+    [data_volume, battery_life] = volume_for_beacons_and_time(3, 0.5);
     
     for i = signs_set_lst
         dct_dir = [signs_dir, 'set', num2str(i), '/jpeg_res/'];
@@ -239,20 +238,20 @@ if 1
     month3 = []
     
     
-    months = [ 62    60    58    56    54    51    49    46    44    41    38    35    32 28    25    21    18    14    12     9     7     5];
+    months = [ 62    60    58    56    54    51    49    46    44 41 38    35    32 28    25    21    18    14    12     9     7     5];
     for m = months
         curr_lst1 = [];
         if isKey(dct_map1, num2str(m))
-            curr_lst1 = [curr_lst1, dct_map1(num2str(m))];
+            curr_lst1 = [curr_lst1, mean(dct_map1(num2str(m)))];
         end
         if isKey(wavelet_map1, num2str(m))
-            curr_lst1 = [curr_lst1, wavelet_map1(num2str(m))];
+            curr_lst1 = [curr_lst1, mean(wavelet_map1(num2str(m)))];
         end
         if isKey(tri1_map1, num2str(m))
-            curr_lst1 = [curr_lst1, tri1_map1(num2str(m))];
+            curr_lst1 = [curr_lst1, mean(tri1_map1(num2str(m)))];
         end
         if isKey(tri2_map1, num2str(m))
-            curr_lst1 = [curr_lst1, tri2_map1(num2str(m))];
+            curr_lst1 = [curr_lst1, mean(tri2_map1(num2str(m)))];
         end
         if length(curr_lst1) > 0
             month1 = [month1, m];
@@ -296,12 +295,11 @@ if 1
         end
     end
     
-    
-    quality1 = [0.4486 0.4683 0.4883 0.6248 0.6777 0.6895 0.6895 0.6895 0.6895 0.6895];
+    quality1 = [0.3556  0.3660 0.3660 0.4019 0.4269  0.4356   0.4356   0.4356  0.4356 0.4611];
     month1 = [32 28 25 21 18 14 12 9 7 5];
-    quality2 = [0.4431 0.4486 0.4683 0.4683 0.4683 0.4883 0.4915 0.6248 0.6248  0.6777 0.6818 0.6895 0.6895 0.6895 0.6895 0.6895 0.6895 0.6895 0.6895];
+    quality2 = [0.4431 0.4486 0.4683  0.4657   0.4586 0.4883 0.4915 0.5293 0.5293  0.6385 0.6385 0.6385 0.6385 0.6419 0.6423 0.6450 0.6504  0.6509   0.6563];
     month2 = [56 54 51 49 46 44 41 38 35 32 28 25 21 18 14 12 9 7 5];
-    quality3 =  [0.4683    0.4683    0.4883     0.4883 0.6092    0.6248    0.6248    0.6248 0.6777    0.6814    0.6892    0.6895    0.6895 0.6895  0.6895 0.6895 0.6895 0.6895 0.6895 0.6895 0.6895 0.6895];
+    quality3 =  [0.4683    0.4683    0.4883     0.4883 0.6092    0.6248    0.6248    0.6248 0.6385    0.6385    0.6385    0.6385    0.6385  0.6385  0.6419 0.6423 0.6498 0.6498 0.6498 0.6523  0.6563  0.6593];
     month3 = [62    60    58    56    54    51    49    46    44    41    38    35    32 28    25    21    18    14    12     9     7     5];
     figure
     hold on
@@ -312,5 +310,5 @@ if 1
     hold off
     legend('1', '2', '3')
     
-    
-end
+    end
+

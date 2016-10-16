@@ -13,8 +13,8 @@ curr_triangularize_res = 0;
 
 do_dct = 1;
 do_wavelet = 1;
-do_tri1 = 0;
-do_tri2 = 0;
+do_tri1 = 1;
+do_tri2 = 1;
 
 addpath(genpath('encoder/'));
 curr_img(:,:,1) = uint8(input_image(:,:,1)) .* (uint8(map)/uint8(255));
